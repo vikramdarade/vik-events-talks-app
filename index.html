@@ -1,0 +1,354 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tech Talks Event</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #0056b3;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .search-container {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .search-container input {
+            width: 70%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        .schedule-item {
+            background-color: #e9ecef;
+            border-left: 5px solid #007bff;
+            margin-bottom: 15px;
+            padding: 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .schedule-item:hover {
+            background-color: #d8e0e7;
+        }
+        .schedule-item.break {
+            background-color: #ffeeba;
+            border-left: 5px solid #ffc107;
+            cursor: default;
+        }
+        .schedule-item.transition {
+            background-color: #f8f9fa;
+            border-left: 5px solid #6c757d;
+            cursor: default;
+            font-style: italic;
+            color: #6c757d;
+            text-align: center;
+        }
+        .talk-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+        .talk-time {
+            color: #0056b3;
+            white-space: nowrap;
+        }
+        .talk-title {
+            flex-grow: 1;
+            margin: 0 10px;
+            color: #333;
+        }
+        .talk-speakers, .talk-categories {
+            font-size: 0.9em;
+            color: #555;
+            margin-top: 5px;
+        }
+        .talk-categories span {
+            background-color: #007bff;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 3px;
+            margin-right: 5px;
+            font-size: 0.8em;
+            display: inline-block;
+            margin-top: 3px;
+        }
+        .talk-description {
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px solid #ced4da;
+            font-size: 0.9em;
+            line-height: 1.6;
+            display: none; /* Hidden by default */
+        }
+        .talk-description.visible {
+            display: block;
+        }
+        .break-title {
+            text-align: center;
+            font-weight: bold;
+            color: #856404;
+        }
+        .break-time {
+            text-align: center;
+            color: #856404;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>1-Day Tech Talks Event</h1>
+
+        <div class="search-container">
+            <input type="text" id="categorySearch" placeholder="Search by category...">
+        </div>
+
+        <div id="schedule" class="schedule">
+            <!-- Schedule items will be rendered here by JavaScript -->
+        </div>
+    </div>
+
+    <script>
+        const talksData = [
+ {
+            id: 'talk1',
+            title: `The Future of WebAssembly`,
+            speakers: ['Alice Wonderland'],
+            category: ['Web', 'Performance', 'Frontend'],
+            description: `An in-depth look into how WebAssembly is changing web development and what the future holds for this exciting technology.`
+        },
+ ,
+ {
+            id: 'talk2',
+            title: `Advanced Microservices Patterns`,
+            speakers: ['Bob The Builder', 'Charlie Chaplin'],
+            category: ['Backend', 'Architecture', 'Cloud'],
+            description: `Exploring cutting-edge patterns for building resilient and scalable microservices architectures.`
+        },
+ ,
+ {
+            id: 'talk3',
+            title: `AI in Edge Computing`,
+            speakers: ['Diana Prince'],
+            category: ['AI', 'Edge Computing', 'IoT'],
+            description: `How artificial intelligence is being deployed and optimized on edge devices, and its implications for various industries.`
+        },
+ ,
+ {
+            id: 'talk4',
+            title: `Securing Your JavaScript Applications`,
+            speakers: ['Eve Adams'],
+            category: ['Security', 'JavaScript', 'Frontend'],
+            description: `Best practices and tools for identifying and mitigating security vulnerabilities in modern JavaScript applications.`
+        },
+ ,
+ {
+            id: 'talk5',
+            title: `Quantum Computing Fundamentals`,
+            speakers: ['Frankenstein'],
+            category: ['Quantum', 'Science', 'Emerging Tech'],
+            description: `A gentle introduction to the principles of quantum computing and its potential to revolutionize computation.`
+        },
+ ,
+ {
+            id: 'talk6',
+            title: `DevOps with Kubernetes`,
+            speakers: ['Grace Hopper'],
+            category: ['DevOps', 'Kubernetes', 'Cloud Native'],
+            description: `Streamlining your development workflow and deployments using Kubernetes and modern DevOps practices.`
+        }
+];
+
+        const eventSchedule = [
+ {
+                type: 'talk',
+                id: 'talk1',
+                title: `The Future of WebAssembly`,
+                speakers: ['Alice Wonderland'],
+                category: ['Web', 'Performance', 'Frontend'],
+                description: `An in-depth look into how WebAssembly is changing web development and what the future holds for this exciting technology.`,
+                startTime: '10:00 AM',
+                endTime: '11:00 AM'
+            }
+,
+ {
+                type: 'transition',
+                title: 'Transition',
+                startTime: '11:00 AM',
+                endTime: '11:10 AM'
+            }
+,
+ {
+                type: 'talk',
+                id: 'talk2',
+                title: `Advanced Microservices Patterns`,
+                speakers: ['Bob The Builder', 'Charlie Chaplin'],
+                category: ['Backend', 'Architecture', 'Cloud'],
+                description: `Exploring cutting-edge patterns for building resilient and scalable microservices architectures.`,
+                startTime: '11:10 AM',
+                endTime: '12:10 PM'
+            }
+,
+ {
+                type: 'transition',
+                title: 'Transition',
+                startTime: '12:10 PM',
+                endTime: '12:20 PM'
+            }
+,
+ {
+                type: 'talk',
+                id: 'talk3',
+                title: `AI in Edge Computing`,
+                speakers: ['Diana Prince'],
+                category: ['AI', 'Edge Computing', 'IoT'],
+                description: `How artificial intelligence is being deployed and optimized on edge devices, and its implications for various industries.`,
+                startTime: '12:20 PM',
+                endTime: '01:20 PM'
+            }
+,
+ {
+                type: 'break',
+                title: 'Lunch Break',
+                startTime: '01:20 PM',
+                endTime: '02:20 PM'
+            }
+,
+ {
+                type: 'transition',
+                title: 'Transition',
+                startTime: '02:20 PM',
+                endTime: '02:30 PM'
+            }
+,
+ {
+                type: 'talk',
+                id: 'talk4',
+                title: `Securing Your JavaScript Applications`,
+                speakers: ['Eve Adams'],
+                category: ['Security', 'JavaScript', 'Frontend'],
+                description: `Best practices and tools for identifying and mitigating security vulnerabilities in modern JavaScript applications.`,
+                startTime: '02:30 PM',
+                endTime: '03:30 PM'
+            }
+,
+ {
+                type: 'transition',
+                title: 'Transition',
+                startTime: '03:30 PM',
+                endTime: '03:40 PM'
+            }
+,
+ {
+                type: 'talk',
+                id: 'talk5',
+                title: `Quantum Computing Fundamentals`,
+                speakers: ['Frankenstein'],
+                category: ['Quantum', 'Science', 'Emerging Tech'],
+                description: `A gentle introduction to the principles of quantum computing and its potential to revolutionize computation.`,
+                startTime: '03:40 PM',
+                endTime: '04:40 PM'
+            }
+,
+ {
+                type: 'transition',
+                title: 'Transition',
+                startTime: '04:40 PM',
+                endTime: '04:50 PM'
+            }
+,
+ {
+                type: 'talk',
+                id: 'talk6',
+                title: `DevOps with Kubernetes`,
+                speakers: ['Grace Hopper'],
+                category: ['DevOps', 'Kubernetes', 'Cloud Native'],
+                description: `Streamlining your development workflow and deployments using Kubernetes and modern DevOps practices.`,
+                startTime: '04:50 PM',
+                endTime: '05:50 PM'
+            }
+];
+
+        function renderSchedule(filterCategory = '') {
+            const scheduleContainer = document.getElementById('schedule');
+            scheduleContainer.innerHTML = ''; // Clear previous schedule
+
+            eventSchedule.forEach(item => {
+                let displayItem = true;
+                if (filterCategory && item.type === 'talk') {
+                    displayItem = item.category.some(cat => cat.toLowerCase().includes(filterCategory.toLowerCase()));
+                }
+
+                if (displayItem) {
+                    const itemDiv = document.createElement('div');
+                    itemDiv.classList.add('schedule-item');
+
+                    if (item.type === 'talk') {
+                        itemDiv.dataset.talkId = item.id;
+                        itemDiv.innerHTML = `
+                            <div class="talk-header">
+                                <span class="talk-time">${item.startTime} - ${item.endTime}</span>
+                                <span class="talk-title">${item.title}</span>
+                            </div>
+                            <div class="talk-speakers">Speakers: ${item.speakers.join(', ')}</div>
+                            <div class="talk-categories">
+                                Categories:
+                                ${item.category.map(cat => `<span>${cat}</span>`).join('')}
+                            </div>
+                            <div class="talk-description" id="description-${item.id}">
+                                ${item.description}
+                            </div>
+                        `;
+                        itemDiv.addEventListener('click', () => {
+                            const descriptionDiv = itemDiv.querySelector('.talk-description');
+                            descriptionDiv.classList.toggle('visible');
+                        });
+                    } else if (item.type === 'break') {
+                        itemDiv.classList.add('break');
+                        itemDiv.innerHTML = `
+                            <div class="break-title">${item.title}</div>
+                            <div class="break-time">${item.startTime} - ${item.endTime}</div>
+                        `;
+                    } else if (item.type === 'transition') {
+                        itemDiv.classList.add('transition');
+                        itemDiv.innerHTML = `
+                            <div>${item.title}</div>
+                            <div>${item.startTime} - ${item.endTime}</div>
+                        `;
+                    }
+                    scheduleContainer.appendChild(itemDiv);
+                }
+            });
+        }
+
+        // Initial render
+        renderSchedule();
+
+        // Search functionality
+        document.getElementById('categorySearch').addEventListener('keyup', (event) => {
+            renderSchedule(event.target.value);
+        });
+
+    </script>
+</body>
+</html>
